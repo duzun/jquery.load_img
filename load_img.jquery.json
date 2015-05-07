@@ -1,0 +1,27 @@
+{
+  "name": "jquery.load_img",
+  "title": "Load images asynchronously",
+  "description": "Load images asynchronously and cache them.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/duzun/jquery.load_img",
+  "author": {
+    "name": "Dumitru Uzun",
+    "email": "contact@duzun.me",
+    "url": "https://DUzun.Me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/duzun/jquery.load_img.git"
+  },
+  "bugs": "https://github.com/duzun/jquery.load_img/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/duzun/jquery.load_img/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.7"
+  },
+  "keywords": ["img","image","load","asynchronously"]
+}
