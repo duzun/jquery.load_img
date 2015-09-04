@@ -1,9 +1,9 @@
 {
-  "name": "jquery.autobox",
-  "title": "Autogrow Textareas while typing",
-  "description": "Resize the textarea (vertically or horizontally) automatically to fit the contents",
-  "version": "2.0.0",
-  "homepage": "https://github.com/duzun/jquery.autobox",
+  "name": "jquery.load_img",
+  "title": "Load images asynchronously",
+  "description": "Load images asynchronously and cache them.",
+  "version": "1.1.0",
+  "homepage": "https://github.com/duzun/jquery.load_img",
   "author": {
     "name": "Dumitru Uzun",
     "email": "contact@duzun.me",
@@ -11,17 +11,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/duzun/jquery.autobox.git"
+    "url": "git://github.com/duzun/jquery.load_img.git"
   },
-  "bugs": "https://github.com/duzun/jquery.autobox/issues",
+  "bugs": "https://github.com/duzun/jquery.load_img/issues",
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/duzun/jquery.autobox/blob/master/LICENSE-MIT"
+      "url": "https://github.com/duzun/jquery.load_img/blob/master/LICENSE-MIT"
     }
   ],
   "dependencies": {
     "jquery": "1.7"
   },
-  "keywords": ["textarea","autoresize","vertically","horizontally"]
+  "keywords": ["img","image","load","asynchronously"]
 }
