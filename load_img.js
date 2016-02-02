@@ -16,28 +16,29 @@
  *      $.load_img.exists(src[, cb]) ; // true if exists, false if not (error), undefined if never loaded, load if cb
  *      $.load_img.purgeCache()      ; // remove all image sources from cache
  *
+ *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
- *
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.1.0
+ *  @version 1.1.1
  */
-;(function (win) {
+;(function (window) {
     'use strict';
     // ---------------------------------------------------------------------------
-    var $        = win.jQuery || win.Zepto
-    ,   undefined
+    var undefined
     ,   UNDEFINED = undefined + ''
-    ,   FUNCTION = 'function'
+    ,   FUNCTION  = 'function'
+    ,   jq        = window.jQuery || window.Zepto
     ;
     (typeof define !== FUNCTION || !define.amd
         ? typeof module == UNDEFINED || !module.exports
-            ? function (deps, factory) { factory($); } // Browser
-            : function (deps, factory) { module.exports = factory($||require('jquery')); } // CommonJs
+            ? function (deps, factory) { factory(jq); } // Browser
+            : function (deps, factory) { module.exports = factory(jq||require('jquery')); } // CommonJs
         : define // AMD
     )
-    /*define*/(/*name, */[$?null:'jquery'], function factory($) {
+    /*define*/(/*name, */[jq?null:'jquery'], function factory(jQuery) {
         // ---------------------------------------------------------------------------
-        var doc   = win.document
+        var document = window.document
+        ,   $ = jQuery || jq
         ,   cache = {}
         ;
 
@@ -72,14 +73,14 @@
                 img.trigger('error')
             }
             else {
-                if(!ctx || !ctx.length || ctx[0] == doc) {
-                    ctx = $(doc.body||'body');
+                if(!ctx || !ctx.length || ctx[0] == document) {
+                    ctx = $(document.body||'body');
                 }
                 if(!ctx.length) {
                     var tio = setInterval(function () {
-                        if(doc.body) {
+                        if(document.body) {
                             clearInterval(tio);
-                            ctx = $(doc.body);
+                            ctx = $(document.body);
                             img.prop('src', src);
                             ctx.append(img);
                         }

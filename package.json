@@ -23,10 +23,23 @@
   "dependencies": {
     "jquery": ">=1.7"
   },
+  "scripts": {
+    "verup": "verup"
+  },
+  "verup": {
+    "files": [
+      "jquery.load_img.json",
+      "load_img.jquery.json",
+      "load_img.js"
+    ]
+  },
   "keywords": [
     "img",
     "image",
     "load",
     "asynchronously"
-  ]
+  ],
+  "devDependencies": {
+    "verup": "^1.3"
+  }
 }
