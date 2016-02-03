@@ -19,7 +19,7 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.2.0
+ *  @version 1.2.1
  */
 ;(function (window) {
     'use strict';
@@ -28,7 +28,7 @@
     ,   UNDEFINED = undefined + ''
     ,   FUNCTION  = 'function'
     ,   jq        = window.jQuery || window.Zepto
-    ,   VERSION   = '1.2.0'
+    ,   VERSION   = '1.2.1'
     ;
     (typeof define !== FUNCTION || !define.amd
         ? typeof module == UNDEFINED || !module.exports
@@ -54,7 +54,7 @@
         function load_img(src, clb) {
             var img = $('<img />')
             ,   hasClb = 'function' == typeof clb
-            ,   defered = hasClb ? undefined : new $.Defered
+            ,   defered = hasClb ? undefined : new $.Deferred
             ,   ret = function ret(evt) {
                     var type = evt.type
                     ,   error = type == 'error'
