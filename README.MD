@@ -2,6 +2,7 @@
 
 ## Usage
 ```javascript
+// Callback version
 $.load_img(src, function (srcOrFalse, event) {
   if ( srcOrFalse ) {
       var src = srcOrFalse;
@@ -12,6 +13,17 @@ $.load_img(src, function (srcOrFalse, event) {
   }
 });
 
+// Promise version
+$.load_img(src)
+.then(
+    function onLoad(event) {
+        var src = event.src;
+        // do something with `event.target` and `src`
+    },
+    function onError(event) {
+        // error loading the image. event.type == "error"
+    }
+)
 
 // Check whether an URL is in cache
 if ( $.load_img.inCache(src) ) {
@@ -23,11 +35,11 @@ switch ( $.load_img.exists(src) ) {
     case true:
         // Image loaded, it is safe to use it
     break;
-    
+
     case false:
         // Image loaded, but doesn't exists (or some error), it is not safe to use it
     break;
-    
+
     case undefined:
         // Image not loaded yet, call $.load_img(src) ...
     break;
@@ -44,6 +56,6 @@ $.load_img.exists(src, function(src) {
 });
 
 // remove all image sources from cache
-$.load_img.purgeCache() ; 
+$.load_img.purgeCache() ;
 
 ```

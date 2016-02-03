@@ -19,7 +19,7 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.1.1
+ *  @version 1.2.0
  */
 ;(function (window) {
     'use strict';
@@ -28,6 +28,7 @@
     ,   UNDEFINED = undefined + ''
     ,   FUNCTION  = 'function'
     ,   jq        = window.jQuery || window.Zepto
+    ,   VERSION   = '1.2.0'
     ;
     (typeof define !== FUNCTION || !define.amd
         ? typeof module == UNDEFINED || !module.exports
@@ -52,6 +53,8 @@
          */
         function load_img(src, clb) {
             var img = $('<img />')
+            ,   hasClb = 'function' == typeof clb
+            ,   defered = hasClb ? undefined : new $.Defered
             ,   ret = function ret(evt) {
                     var type = evt.type
                     ,   error = type == 'error'
@@ -60,10 +63,24 @@
                     cache[src] = !error;
                     img.off(error?'load':'error', ret).remove()
                     img.show();
-                    if('function' == typeof clb) clb.call(img, error?false:src, evt);
+                    if(hasClb) {
+                        clb.call(img, error?false:src, evt);
+                    }
+                    else if ( defered ) {
+                        if ( error ) {
+                            defered.reject(evt);
+                        }
+                        else {
+                            defered.resolve(evt, src);
+                        }
+                    }
                 }
             ,   ctx = this.$ctx
             ;
+            if ( defered ) {
+                img.then = $.proxy(defered.then, defered);
+                img.promise = $.proxy(defered.promise, defered);
+            }
             img
                 .hide()
                 .one('load', ret)
@@ -148,6 +165,7 @@
         load_img.purgeCache  = load_img.purge_cache = purgeCache;
 
         load_img.cache       = cache;
+        load_img.VERSION     = VERSION;
 
         return $.load_img = load_img;
     });
