@@ -19,7 +19,7 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.2.1
+ *  @version 1.2.2
  */
 ;(function (window) {
     'use strict';
@@ -28,7 +28,7 @@
     ,   UNDEFINED = undefined + ''
     ,   FUNCTION  = 'function'
     ,   jq        = window.jQuery || window.Zepto
-    ,   VERSION   = '1.2.1'
+    ,   VERSION   = '1.2.2'
     ;
     (typeof define !== FUNCTION || !define.amd
         ? typeof module == UNDEFINED || !module.exports
@@ -75,7 +75,8 @@
                         }
                     }
                 }
-            ,   ctx = this.$ctx
+            ,   that = this
+            ,   ctx = that && that != $ && that.$ctx
             ;
             if ( defered ) {
                 img.then = $.proxy(defered.then, defered);
