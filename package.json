@@ -9,6 +9,7 @@
     "email": "contact@duzun.me",
     "url": "https://DUzun.Me"
   },
+  "reveal": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/duzun/jquery.load_img.git"
