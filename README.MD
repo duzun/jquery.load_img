@@ -36,7 +36,7 @@ In your web page:
 
 <!-- or CDN version -->
 <script src="//unpkg.com/jquery.load_img"></script>
-
+```
 
 ## Usage
 
