@@ -1,45 +1,21 @@
 /**
  *  Load images asynchronously and cache them.
  *
- *  Usage:
- *      $.load_img(src, function (srcOrFalse, event) {
- *          if ( srcOrFalse ) {
- *              var src = srcOrFalse;
- *              // do something with `this` image and `src`
- *          }
- *          else {
- *              // error loading the image. event.type == "error"
- *          }
- *      });
- *
- *      $.load_img.inCache(src)      ; // check whether an URL is in cache
- *      $.load_img.exists(src[, cb]) ; // true if exists, false if not (error), undefined if never loaded, load if cb
- *      $.load_img.purgeCache()      ; // remove all image sources from cache
- *
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.2.2
+ *  @version 1.3.0
  */
-;(function (window) {
-    'use strict';
-    // ---------------------------------------------------------------------------
-    var undefined
-    ,   UNDEFINED = undefined + ''
-    ,   FUNCTION  = 'function'
-    ,   jq        = window.jQuery || window.Zepto
-    ,   VERSION   = '1.2.2'
-    ;
-    (typeof define !== FUNCTION || !define.amd
-        ? typeof module == UNDEFINED || !module.exports
-            ? function (deps, factory) { factory(jq); } // Browser
-            : function (deps, factory) { module.exports = factory(jq||require('jquery')); } // CommonJs
-        : define // AMD
-    )
-    /*define*/(/*name, */[jq?null:'jquery'], function factory(jQuery) {
+
+// ---------------------------------------------------------------------------
+export const VERSION   = '1.3.0';
+
+export default function init($) {
+        var undefined; //jshint ignore:line
+        const UNDEFINED = undefined + '';
+
         // ---------------------------------------------------------------------------
         var document = window.document
-        ,   $ = jQuery || jq
         ,   cache = {}
         ;
 
@@ -54,14 +30,14 @@
         function load_img(src, clb) {
             var img = $('<img />')
             ,   hasClb = 'function' == typeof clb
-            ,   defered = hasClb ? undefined : new $.Deferred
+            ,   defered = hasClb ? undefined : new $.Deferred()
             ,   ret = function ret(evt) {
                     var type = evt.type
                     ,   error = type == 'error'
                     ;
                     evt.src = src;
                     cache[src] = !error;
-                    img.off(error?'load':'error', ret).remove()
+                    img.off(error?'load':'error', ret).remove();
                     img.show();
                     if(hasClb) {
                         clb.call(img, error?false:src, evt);
@@ -88,7 +64,7 @@
                 .one('error', ret)
             ;
             if(cache[src] === false) {
-                img.trigger('error')
+                img.trigger('error');
             }
             else {
                 if(!ctx || !ctx.length || ctx[0] == document) {
@@ -102,7 +78,7 @@
                             img.prop('src', src);
                             ctx.append(img);
                         }
-                    }, 50)
+                    }, 50);
                 }
                 else {
                     img.prop('src', src);
@@ -110,7 +86,7 @@
                 }
             }
             return img;
-        };
+        }
 
         /**
          * Check whether src has beed loaded (either success or error)
@@ -169,6 +145,9 @@
         load_img.VERSION     = VERSION;
 
         return $.load_img = load_img;
-    });
 }
-(this));
+
+if ( typeof window !== 'undefined' ) {
+    const $ = window.jQuery || window.Zepto;
+    if ( $ ) init($);
+}
