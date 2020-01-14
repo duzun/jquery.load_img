@@ -27,17 +27,20 @@
     }
   ],
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": "^3.5.1"
   },
   "scripts": {
+    "build": "gulp",
     "verup": "verup"
   },
-  "verup": {
-    "files": [
-      "jquery.load_img.json",
-      "load_img.jquery.json",
-      "load_img.js"
-    ]
+  "extra": {
+    "verup": {
+      "files": [
+        "jquery.load_img.json",
+        "load_img.jquery.json",
+        "load_img.js"
+      ]
+    }
   },
   "keywords": [
     "img",
@@ -51,15 +54,16 @@
     "babel-register": "^6.24",
     "gulp": "^3.9",
     "gulp-babel": "^7.0",
-    "gulp-better-rollup": "^3.1",
-    "gulp-load-plugins": "^1.5",
+    "gulp-better-rollup": "^3.4.0",
+    "gulp-load-plugins": "^1.6.0",
     "gulp-plugins": "0.0.18",
-    "gulp-qunit": "^2.0",
+    "gulp-qunit": "^2.1.1",
     "gulp-rename": "^1.2",
-    "gulp-sourcemaps": "^2.6",
-    "require-json5": "^1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "natives": "^1.1.6",
+    "require-json5": "^1.1.0",
     "rollup-plugin-babel": "^3.0",
     "rollup-plugin-uglify": "^3.0",
-    "verup": "^1.6"
+    "verup": "^1.7.1"
   }
 }
