@@ -33,12 +33,14 @@
     "build": "gulp",
     "verup": "verup"
   },
-  "verup": {
-    "files": [
-      "jquery.load_img.json",
-      "load_img.jquery.json",
-      "load_img.js"
-    ]
+  "extra": {
+    "verup": {
+      "files": [
+        "jquery.load_img.json",
+        "load_img.jquery.json",
+        "load_img.js"
+      ]
+    }
   },
   "keywords": [
     "img",
@@ -55,13 +57,13 @@
     "gulp-better-rollup": "^3.4.0",
     "gulp-load-plugins": "^1.6.0",
     "gulp-plugins": "0.0.18",
-    "gulp-qunit": "^2.0.3",
+    "gulp-qunit": "^2.1.1",
     "gulp-rename": "^1.2",
     "gulp-sourcemaps": "^2.6.5",
     "natives": "^1.1.6",
-    "require-json5": "^1.0",
+    "require-json5": "^1.1.0",
     "rollup-plugin-babel": "^3.0",
     "rollup-plugin-uglify": "^3.0",
-    "verup": "^1.7"
+    "verup": "^1.7.1"
   }
 }
