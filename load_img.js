@@ -8,7 +8,9 @@
  */
 
 // ---------------------------------------------------------------------------
-export const VERSION   = '1.3.0';
+const VERSION   = '1.3.0';
+
+init.VERSION = VERSION;
 
 export default function init($) {
         var undefined; //jshint ignore:line

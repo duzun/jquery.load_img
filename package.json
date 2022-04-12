@@ -30,7 +30,7 @@
     "jquery": "^3.5.1"
   },
   "scripts": {
-    "build": "gulp",
+    "build": "npx rollup -c rollup.config.js ",
     "verup": "verup"
   },
   "extra": {
@@ -48,22 +48,26 @@
     "load",
     "asynchronously"
   ],
+  "jshintConfig": {
+    "esversion": 9,
+    "laxbreak": true,
+    "laxcomma": true,
+    "undef": true,
+    "unused": true,
+    "sub": true,
+    "expr": true,
+    "bitwise": false,
+    "eqeqeq": false,
+    "boss": true,
+    "eqnull": true,
+    "scripturl": true,
+    "-W041": false
+  },
   "devDependencies": {
-    "babel-plugin-external-helpers": "^6.22",
-    "babel-preset-env": "^1.5",
-    "babel-register": "^6.24",
-    "gulp": "^3.9",
-    "gulp-babel": "^7.0",
-    "gulp-better-rollup": "^3.4.0",
-    "gulp-load-plugins": "^1.6.0",
-    "gulp-plugins": "0.0.18",
-    "gulp-qunit": "^2.1.1",
-    "gulp-rename": "^1.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "natives": "^1.1.6",
-    "require-json5": "^1.1.0",
-    "rollup-plugin-babel": "^3.0",
-    "rollup-plugin-uglify": "^3.0",
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-terser": "^7.0.2",
     "verup": "^1.7.1"
   }
 }
