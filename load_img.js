@@ -4,20 +4,22 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.3.0
+ *  @version 1.4.0
  */
 
 // ---------------------------------------------------------------------------
-const VERSION   = '1.3.0';
+const VERSION   = '1.4.0';
 
 init.VERSION = VERSION;
 
-export default function init($) {
+export default function init($, global) {
+    global = typeof globalThis != 'undefined' ? globalThis : window;
+
         var undefined; //jshint ignore:line
         const UNDEFINED = undefined + '';
 
         // ---------------------------------------------------------------------------
-        var document = window.document
+        const { document } = global
         ,   cache = {}
         ;
 
@@ -149,7 +151,7 @@ export default function init($) {
         return $.load_img = load_img;
 }
 
-if ( typeof window !== 'undefined' ) {
-    const $ = window.jQuery || window.Zepto;
-    if ( $ ) init($);
-}
+;(function (global) {
+    const $ = global.jQuery || global.Zepto;
+    if ($) init($, global);
+}(typeof globalThis != 'undefined' ? globalThis : typeof window != 'undefined' ? window : global));
