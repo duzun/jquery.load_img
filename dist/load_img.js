@@ -10,10 +10,10 @@
      *  @license MIT
      *  @git https://github.com/duzun/jquery.load_img
      *  @author Dumitru Uzun (DUzun.Me)
-     *  @version 1.5.2
+     *  @version 1.6.0
      */
     // ---------------------------------------------------------------------------
-    var VERSION = '1.5.2';
+    var VERSION = '1.6.0';
     init.VERSION = VERSION;
     function init($, global) {
       if (!global) global = getGlobal();
@@ -40,6 +40,9 @@
         }
 
         options = options ? $.extend({}, load_img.settings, options) : load_img.settings;
+        var _options = options,
+            errorExpires = _options.errorExpires,
+            decode = _options.decode;
 
         var img = $('<img />'),
             hasClb = 'function' == typeof clb,
@@ -65,12 +68,27 @@
           img.show();
 
           if (hasClb) {
-            clb.call(img, error ? false : src, evt);
+            if (decode && !error && img[0].decode) {
+              img[0].decode().then(function () {
+                return clb.call(img, src, evt);
+              }, function (error) {
+                evt.reason = error;
+                clb.call(img, false, evt);
+              });
+            } else {
+              clb.call(img, error ? false : src, evt);
+            }
           } else if (defered) {
             if (error) {
               defered.reject(evt);
             } else {
-              defered.resolve(evt, src);
+              if (decode && img[0].decode) {
+                img[0].decode().then(function () {
+                  return defered.resolve(evt, src);
+                }, defered.reject);
+              } else {
+                defered.resolve(evt, src);
+              }
             }
           }
         },
@@ -83,8 +101,6 @@
 
         img.hide().one('load', onEvent).one('error', onEvent);
         var errorEvt = errors[src];
-        var _options = options,
-            errorExpires = _options.errorExpires;
 
         if (errorEvt && errorExpires && errorExpires < Date.now() - errorEvt.timeStamp) {
           errorEvt = undefined$1;
@@ -146,6 +162,16 @@
           cb && load_img(src, cb);
         }
       }
+      /**
+       * Get just the src of the image after preloading it.
+       *
+       * If the image is already preloaded, just resolve with the src.
+       *
+       * @param {string} src
+       * @param {object} options
+       * @returns {Promise<string>}
+       */
+
 
       function loadSrc(src, options) {
         if (exists(src)) {
@@ -196,7 +222,9 @@
       load_img.errors = errors;
       load_img.VERSION = VERSION;
       load_img.settings = {
-        errorExpires: 1e3 // after how many milliseconds to allow to retry loading an image which errored
+        errorExpires: 1e3,
+        // after how many milliseconds to allow to retry loading an image which errored
+        decode: !!Image.prototype.decode // wait for decode after loading the image
 
       };
       return $.load_img = load_img;
