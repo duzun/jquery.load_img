@@ -26,9 +26,6 @@
       "url": "https://github.com/duzun/jquery.load_img/blob/master/LICENSE-MIT"
     }
   ],
-  "dependencies": {
-    "jquery": "^3.5.1"
-  },
   "scripts": {
     "build": "npx rollup -c rollup.config.js ",
     "verup": "verup"
@@ -62,6 +59,9 @@
     "eqnull": true,
     "scripturl": true,
     "-W041": false
+  },
+  "peerDependencies": {
+    "jquery": "^3.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
