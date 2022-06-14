@@ -107,4 +107,16 @@ $.load_img.exists(src, function(src) {
 // remove all image sources from cache
 $.load_img.purgeCache() ;
 
+
+// If we are not interested in the Image instance, we could ask just for the src of the image after it is preloaded
+$.load_img.src(src, options)
+.then(
+    (src) => {
+        // image loaded and exists
+    },
+    (errorEvent) => {
+        // error loading the image. errorEvent.type == "error"
+    }
+);
+
 ```

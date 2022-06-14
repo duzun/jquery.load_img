@@ -4,16 +4,16 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.5.1
+ *  @version 1.5.2
  */
 
 // ---------------------------------------------------------------------------
-const VERSION   = '1.5.1';
+const VERSION   = '1.5.2';
 
 init.VERSION = VERSION;
 
 export default function init($, global) {
-    global = typeof globalThis != 'undefined' ? globalThis : window;
+        if (!global) global = getGlobal();
 
         var undefined; //jshint ignore:line
 
@@ -77,8 +77,7 @@ export default function init($, global) {
             ;
 
             if ( defered ) {
-                img.then = $.proxy(defered.then, defered);
-                img.promise = $.proxy(defered.promise, defered);
+                defered.promise(img);
             }
 
             img
@@ -149,6 +148,22 @@ export default function init($, global) {
             }
         }
 
+        function loadSrc(src, options) {
+
+            if (exists(src)) {
+                let defered = $.Deferred();
+                let promise = defered.promise();
+                defered.resolve(src);
+                return promise;
+            }
+
+            return load_img(src, options)
+            .then((evt) => {
+                const { src, target } = evt;
+                return src || target && target.src;
+            });
+        }
+
         function isImgOk(img) {
             if ( !img.complete ) return false; /* Only IE is correct here */
             if ( typeof img.naturalWidth != 'undefined' && img.naturalWidth == 0 ) return false; /* Other Browsers */
@@ -171,6 +186,7 @@ export default function init($, global) {
         // Export
 
         load_img.exists      = exists;
+        load_img.src         = loadSrc;
         load_img.inCache     = load_img.in_cache    = inCache;
         load_img.isImgOk     = load_img.is_ok       = isImgOk;
         load_img.purgeCache  = load_img.purge_cache = purgeCache;
@@ -186,7 +202,11 @@ export default function init($, global) {
         return $.load_img = load_img;
 }
 
+function getGlobal() {
+    return typeof globalThis != 'undefined' ? globalThis : typeof window != 'undefined' ? window : global;
+}
+
 ;(function (global) {
     const $ = global.jQuery || global.Zepto;
     if ($) init($, global);
-}(typeof globalThis != 'undefined' ? globalThis : typeof window != 'undefined' ? window : global));
+}(getGlobal()));
