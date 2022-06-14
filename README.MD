@@ -45,6 +45,9 @@ In your web page:
 // If 0, calls to $.load_img() for a source that errored once would error all the time.
 $.load_img.settings.errorExpires = 1000; // defaults to 1s
 
+// Use HTMLImageElement.decode() API when available by default
+$.load_img.settings.decode = !!HTMLImageElement.prototype.decode;
+
 // Callback version
 $.load_img(src, function (srcOrFalse, event) {
   if ( srcOrFalse ) {
@@ -69,7 +72,7 @@ $.load_img(src)
 )
 
 // Provide options object
-$.load_img(src, { errorExpires: 3000 })
+$.load_img(src, { errorExpires: 3000, decode: false })
 .then(
     // ...
 )
@@ -109,7 +112,7 @@ $.load_img.purgeCache() ;
 
 
 // If we are not interested in the Image instance, we could ask just for the src of the image after it is preloaded
-$.load_img.src(src, options)
+$.load_img.src(src, { decode: false })
 .then(
     (src) => {
         // image loaded and exists
