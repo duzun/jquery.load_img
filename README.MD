@@ -41,6 +41,10 @@ In your web page:
 ## Usage
 
 ```javascript
+// Set after how many milliseconds to allow to retry loading an image which errored.
+// If 0, calls to $.load_img() for a source that errored once would error all the time.
+$.load_img.settings.errorExpires = 1000; // defaults to 1s
+
 // Callback version
 $.load_img(src, function (srcOrFalse, event) {
   if ( srcOrFalse ) {

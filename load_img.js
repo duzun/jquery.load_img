@@ -4,11 +4,11 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.4.0
+ *  @version 1.5.0
  */
 
 // ---------------------------------------------------------------------------
-const VERSION   = '1.4.0';
+const VERSION   = '1.5.0';
 
 init.VERSION = VERSION;
 
@@ -16,11 +16,11 @@ export default function init($, global) {
     global = typeof globalThis != 'undefined' ? globalThis : window;
 
         var undefined; //jshint ignore:line
-        const UNDEFINED = undefined + '';
 
         // ---------------------------------------------------------------------------
         const { document } = global
         ,   cache = {}
+        ,   errors = {}
         ;
 
         /**
@@ -35,13 +35,23 @@ export default function init($, global) {
             var img = $('<img />')
             ,   hasClb = 'function' == typeof clb
             ,   defered = hasClb ? undefined : new $.Deferred()
-            ,   ret = function ret(evt) {
+            ,   onEvent = function (evt) {
                     var type = evt.type
                     ,   error = type == 'error'
                     ;
+
+                    if (!evt.timeStamp) {
+                        evt.timeStamp = Date.now();
+                    }
                     evt.src = src;
+                    if(error) {
+                        errors[src] = evt;
+                    }
+                    else {
+                        delete errors[src];
+                    }
                     cache[src] = !error;
-                    img.off(error?'load':'error', ret).remove();
+                    img.off(error ? 'load' : 'error', onEvent).remove();
                     img.show();
                     if(hasClb) {
                         clb.call(img, error?false:src, evt);
@@ -58,17 +68,26 @@ export default function init($, global) {
             ,   that = this
             ,   ctx = that && that != $ && that.$ctx
             ;
+
             if ( defered ) {
                 img.then = $.proxy(defered.then, defered);
                 img.promise = $.proxy(defered.promise, defered);
             }
+
             img
                 .hide()
-                .one('load', ret)
-                .one('error', ret)
+                .one('load', onEvent)
+                .one('error', onEvent)
             ;
-            if(cache[src] === false) {
-                img.trigger('error');
+
+            let errorEvt = errors[src];
+            const { errorExpires } = load_img.settings;
+            if (errorEvt && errorExpires && errorExpires < Date.now() - errorEvt.timeStamp) {
+                errorEvt = undefined;
+            }
+
+            if (errorEvt) {
+                img.prop('src', src).trigger(errorEvt);
             }
             else {
                 if(!ctx || !ctx.length || ctx[0] == document) {
@@ -125,7 +144,7 @@ export default function init($, global) {
 
         function isImgOk(img) {
             if ( !img.complete ) return false; /* Only IE is correct here */
-            if ( typeof img.naturalWidth != UNDEFINED && img.naturalWidth == 0 ) return false; /* Other Browsers */
+            if ( typeof img.naturalWidth != 'undefined' && img.naturalWidth == 0 ) return false; /* Other Browsers */
             return true; /* No other way of checking: assume it's ok. */
         }
 
@@ -135,6 +154,10 @@ export default function init($, global) {
         function purgeCache() {
             $.each(cache, function (n,v) {
                 delete cache[n];
+            });
+
+            $.each(errors, function (n,v) {
+                delete errors[n];
             });
         }
 
@@ -146,7 +169,12 @@ export default function init($, global) {
         load_img.purgeCache  = load_img.purge_cache = purgeCache;
 
         load_img.cache       = cache;
+        load_img.errors      = errors;
         load_img.VERSION     = VERSION;
+
+        load_img.settings = {
+            errorExpires: 1e3, // after how many milliseconds to allow to retry loading an image which errored
+        };
 
         return $.load_img = load_img;
 }
