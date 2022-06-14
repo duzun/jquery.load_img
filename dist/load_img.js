@@ -10,13 +10,13 @@
      *  @license MIT
      *  @git https://github.com/duzun/jquery.load_img
      *  @author Dumitru Uzun (DUzun.Me)
-     *  @version 1.5.1
+     *  @version 1.5.2
      */
     // ---------------------------------------------------------------------------
-    var VERSION = '1.5.1';
+    var VERSION = '1.5.2';
     init.VERSION = VERSION;
     function init($, global) {
-      global = typeof globalThis != 'undefined' ? globalThis : window;
+      if (!global) global = getGlobal();
       var undefined$1; //jshint ignore:line
       // ---------------------------------------------------------------------------
 
@@ -78,8 +78,7 @@
             ctx = that && that != $ && that.$ctx;
 
         if (defered) {
-          img.then = $.proxy(defered.then, defered);
-          img.promise = $.proxy(defered.promise, defered);
+          defered.promise(img);
         }
 
         img.hide().one('load', onEvent).one('error', onEvent);
@@ -148,6 +147,21 @@
         }
       }
 
+      function loadSrc(src, options) {
+        if (exists(src)) {
+          var defered = $.Deferred();
+          var promise = defered.promise();
+          defered.resolve(src);
+          return promise;
+        }
+
+        return load_img(src, options).then(function (evt) {
+          var src = evt.src,
+              target = evt.target;
+          return src || target && target.src;
+        });
+      }
+
       function isImgOk(img) {
         if (!img.complete) return false;
         /* Only IE is correct here */
@@ -174,6 +188,7 @@
 
 
       load_img.exists = exists;
+      load_img.src = loadSrc;
       load_img.inCache = load_img.in_cache = inCache;
       load_img.isImgOk = load_img.is_ok = isImgOk;
       load_img.purgeCache = load_img.purge_cache = purgeCache;
@@ -187,10 +202,14 @@
       return $.load_img = load_img;
     }
 
+    function getGlobal() {
+      return typeof globalThis != 'undefined' ? globalThis : typeof window != 'undefined' ? window : global;
+    }
+
     (function (global) {
       var $ = global.jQuery || global.Zepto;
       if ($) init($, global);
-    })(typeof globalThis != 'undefined' ? globalThis : typeof window != 'undefined' ? window : global);
+    })(getGlobal());
 
     return init;
 
