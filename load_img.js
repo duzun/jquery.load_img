@@ -4,11 +4,11 @@
  *  @license MIT
  *  @git https://github.com/duzun/jquery.load_img
  *  @author Dumitru Uzun (DUzun.Me)
- *  @version 1.5.0
+ *  @version 1.5.1
  */
 
 // ---------------------------------------------------------------------------
-const VERSION   = '1.5.0';
+const VERSION   = '1.5.1';
 
 init.VERSION = VERSION;
 
@@ -31,7 +31,14 @@ export default function init($, global) {
          *
          * @return $(Image) element
          */
-        function load_img(src, clb) {
+        function load_img(src, options, clb) {
+            if(!clb && typeof options == 'function') {
+                clb = options;
+                options = undefined;
+            }
+
+            options = options ? $.extend({}, load_img.settings, options) : load_img.settings;
+
             var img = $('<img />')
             ,   hasClb = 'function' == typeof clb
             ,   defered = hasClb ? undefined : new $.Deferred()
@@ -81,7 +88,7 @@ export default function init($, global) {
             ;
 
             let errorEvt = errors[src];
-            const { errorExpires } = load_img.settings;
+            const { errorExpires } = options;
             if (errorEvt && errorExpires && errorExpires < Date.now() - errorEvt.timeStamp) {
                 errorEvt = undefined;
             }

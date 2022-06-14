@@ -68,6 +68,12 @@ $.load_img(src)
     }
 )
 
+// Provide options object
+$.load_img(src, { errorExpires: 3000 })
+.then(
+    // ...
+)
+
 // Check whether an URL is in cache
 if ( $.load_img.inCache(src) ) {
     // ...
