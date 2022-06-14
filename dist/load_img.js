@@ -10,10 +10,10 @@
      *  @license MIT
      *  @git https://github.com/duzun/jquery.load_img
      *  @author Dumitru Uzun (DUzun.Me)
-     *  @version 1.5.0
+     *  @version 1.5.1
      */
     // ---------------------------------------------------------------------------
-    var VERSION = '1.5.0';
+    var VERSION = '1.5.1';
     init.VERSION = VERSION;
     function init($, global) {
       global = typeof globalThis != 'undefined' ? globalThis : window;
@@ -33,7 +33,14 @@
        * @return $(Image) element
        */
 
-      function load_img(src, clb) {
+      function load_img(src, options, clb) {
+        if (!clb && typeof options == 'function') {
+          clb = options;
+          options = undefined$1;
+        }
+
+        options = options ? $.extend({}, load_img.settings, options) : load_img.settings;
+
         var img = $('<img />'),
             hasClb = 'function' == typeof clb,
             defered = hasClb ? undefined$1 : new $.Deferred(),
@@ -77,7 +84,8 @@
 
         img.hide().one('load', onEvent).one('error', onEvent);
         var errorEvt = errors[src];
-        var errorExpires = load_img.settings.errorExpires;
+        var _options = options,
+            errorExpires = _options.errorExpires;
 
         if (errorEvt && errorExpires && errorExpires < Date.now() - errorEvt.timeStamp) {
           errorEvt = undefined$1;
